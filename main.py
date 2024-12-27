@@ -1,8 +1,12 @@
+from tornado.httpclient import HTTPError
+from win32con import HTTOP
+
 from maze_solver.maze import create_maze
 from maze_solver.algorithms import a_star, dfs, bfs, create_graph, dfs_biased
 from maze_solver.visualization import visualize
 import matplotlib.pyplot as plt
-DPI: int = 800 # Lower DPI if workloads are too high
+
+DPI: int = 200 # Adjust the resolution of the output image (DPI: Dots per Inch) based on your preference
 # Close ALL open plots
 
 def main() -> None:
@@ -45,29 +49,32 @@ def main() -> None:
             continue
 
     graph = create_graph(maze)  # create the graph
+    try:
+        # Run and visualize Depth-First Search
+        solution, cost, seen = dfs(graph, start, end)
+        visualize(maze, solution, seen, cost, "Depth-First Search", DPI)
+        print("Printing the DFS Solution...")
 
-    # Run and visualize Depth-First Search
-    solution, cost, seen = dfs(graph, start, end)
-    visualize(maze, solution, seen, cost, "Depth-First Search", DPI)
-    print("Printing the DFS Solution...")
+        # Run and visualize Biased Depth-First Search
+        solution, cost, seen = dfs_biased(maze, start, end)
+        visualize(maze, solution, seen, cost, "Biased Depth-First Search", DPI)
+        print("Printing the Biased DFS Solution...")
 
-    # Run and visualize Biased Depth-First Search
-    solution, cost, seen = dfs_biased(maze, start, end)
-    visualize(maze, solution, seen, cost, "Biased Depth-First Search", DPI)
-    print("Printing the Biased DFS Solution...")
+        # Run and visualize Breadth-First Search
+        solution, cost, seen = bfs(graph, start, end)
+        visualize(maze, solution, seen, cost, "Breadth-First Search", DPI)
+        print("Printing the BFS Solution...")
 
-    # Run and visualize Breadth-First Search
-    solution, cost, seen = bfs(graph, start, end)
-    visualize(maze, solution, seen, cost, "Breadth-First Search", DPI)
-    print("Printing the BFS Solution...")
+        # Run and visualize A* Search
+        solution, cost, seen = a_star(graph, start, end)
+        visualize(maze, solution, seen, cost, "A-Star Search", DPI)
+        print("Printing the A* Search Solution...")
 
-    # Run and visualize A* Search
-    solution, cost, seen = a_star(graph, start, end)
-    visualize(maze, solution, seen, cost, "A-Star Search", DPI)
-    print("Printing the A* Search Solution...")
-
-    print("All solutions have been printed.")
-    print()
-    print("Reminder: Close the plots to avoid unnecessary memory usage.")
+        print("All solutions have been printed.")
+        print()
+        print("Reminder: Close the plots to avoid unnecessary memory usage.")
+    except Exception:
+        print("An error occurred while solving the maze. Please close plots and try again.")
+        return
 if __name__ == '__main__':
     main()
