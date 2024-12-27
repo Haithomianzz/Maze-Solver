@@ -23,7 +23,10 @@ Maze Solver is a Python-based application that allows users to create custom maz
    ```
 
 2. **Run setup.py** :
+   ```bash
+    python setup.py install
 
+   ```
 ## Usage
 
 1. **Run the Application**:
@@ -31,7 +34,7 @@ Maze Solver is a Python-based application that allows users to create custom maz
    ```bash
    python main.py
    ```
-
+    
 2. **Specify the maze size with console**
    
 3. **Choose start and end points based on resulted Maze Generation** 
